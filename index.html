@@ -1,205 +1,187 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8" />
-  <title>Scatter Mahjong - Ultimate Neon</title>
-  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&display=swap" rel="stylesheet">
-  <style>
-    :root {
-      --bg: radial-gradient(circle at center, #0a0a12, #020204 90%);
-      --cyber-yellow: #fcee0a;
-      --tosca-neon: #00f5ff;
-      --ferrari-red: #ff2800;
-      --success-green: #39ff14;
-      --panel-bg: rgba(10, 10, 20, 0.85);
-      --glass-border: rgba(255,255,255,0.1);
-      --shadow-glow: rgba(0,245,255,0.25);
-    }
+<meta charset="UTF-8">
+<title>Scatter Mahjong - Old Skull Luxurious</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&family=Rubik+Mono+One&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg-dark: radial-gradient(circle at center, #0c0a0a, #1a0f0f 95%);
+    --gold: #ffd700;
+    --blood-red: #ff1a1a;
+    --neon-purple: #9d00ff;
+    --smoke-gray: rgba(50,50,50,0.6);
+    --panel-glass: rgba(15,15,15,0.85);
+    --glow-shadow: rgba(255,215,0,0.25);
+    --green-success: #39ff14;
+  }
 
-    * { box-sizing: border-box; font-family: 'Orbitron', monospace; font-weight: 600; }
-    body, html {
-      margin: 0; padding: 0; width: 100%; height: 100%; overflow: hidden;
-      background: var(--bg);
-      display: flex; align-items: center; justify-content: center;
-    }
+  * { box-sizing: border-box; font-family: 'Orbitron', monospace; font-weight: 600; }
+  body, html {
+    margin: 0; padding: 0;
+    width: 100%; height: 100%;
+    overflow: hidden;
+    background: var(--bg-dark);
+    display: flex; align-items: center; justify-content: center;
+  }
 
-    #vortexCanvas { position: fixed; inset: 0; z-index: 0; pointer-events: none; }
+  /* Canvas particle & smoke effect */
+  #vortexCanvas { position: fixed; inset: 0; z-index: 0; pointer-events: none; }
 
-    .main-wrapper {
-      position: relative;
-      z-index: 10;
-      width: 95%;
-      max-width: 1200px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
+  .main-wrapper {
+    position: relative; z-index: 10;
+    width: 95%; max-width: 1200px;
+    display: flex; flex-direction: column; align-items: center;
+  }
 
-    .moving-h1 {
-      color: var(--cyber-yellow);
-      letter-spacing: 12px;
-      margin-bottom: 25px;
-      font-size: 3rem;
-      text-align: center;
-      animation: floatMove 3s ease-in-out infinite;
-      text-transform: uppercase;
-      text-shadow:
-        0 0 10px var(--cyber-yellow),
-        0 0 25px var(--tosca-neon),
-        0 0 50px var(--ferrari-red),
-        0 0 80px var(--cyber-yellow);
-    }
+  /* Header */
+  .moving-h1 {
+    font-family: 'Rubik Mono One', monospace;
+    color: var(--gold);
+    font-size: 3rem;
+    letter-spacing: 10px;
+    margin-bottom: 25px;
+    text-transform: uppercase;
+    text-align: center;
+    text-shadow: 
+      0 0 10px var(--gold),
+      0 0 20px var(--blood-red),
+      0 0 40px var(--neon-purple),
+      0 0 60px var(--gold);
+    animation: floatMove 3s ease-in-out infinite;
+  }
 
-    .container-outer {
-      position: relative;
-      padding: 5px;
-      border-radius: 25px;
-      overflow: hidden;
-      width: 100%;
-      background: linear-gradient(120deg, var(--tosca-neon), var(--ferrari-red), var(--cyber-yellow));
-      background-size: 400% 400%;
-      animation: borderFlow 8s ease infinite;
-      box-shadow: 0 0 30px var(--tosca-neon), 0 0 60px var(--ferrari-red);
-    }
+  @keyframes floatMove {
+    0%,100% { transform: translateY(0); }
+    50% { transform: translateY(-7px); }
+  }
 
-    @keyframes borderFlow {
-      0% { background-position: 0% 50%; }
-      50% { background-position: 100% 50%; }
-      100% { background-position: 0% 50%; }
-    }
+  /* Outer glowing border */
+  .container-outer {
+    position: relative;
+    padding: 5px;
+    border-radius: 25px;
+    overflow: hidden;
+    width: 100%;
+    background: linear-gradient(120deg, var(--blood-red), var(--neon-purple), var(--gold));
+    background-size: 400% 400%;
+    animation: borderFlow 8s ease infinite;
+    box-shadow: 0 0 25px var(--blood-red), 0 0 50px var(--neon-purple);
+  }
 
-    .container {
-      width: 100%;
-      padding: 35px;
-      background: var(--panel-bg);
-      backdrop-filter: blur(25px);
-      border-radius: 20px;
-      border-left: 5px solid var(--ferrari-red);
-      border-bottom: 15px solid var(--tosca-neon);
-      position: relative;
-      z-index: 1;
-      box-shadow:
-        inset 0 0 40px rgba(255,255,255,0.05),
-        0 0 50px var(--shadow-glow);
-      transition: 0.3s;
-    }
+  @keyframes borderFlow {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
 
-    textarea {
-      width: 100%;
-      height: 180px;
-      background: rgba(0,0,0,0.75);
-      border: 2px solid var(--ferrari-red);
-      color: #fff;
-      padding: 18px;
-      font-family: 'Consolas', monospace;
-      font-size: 15px;
-      border-radius: 15px;
-      resize: none;
-      outline: none;
-      transition: 0.3s;
-      box-shadow: inset 0 0 15px rgba(0,245,255,0.1);
-    }
-    textarea:focus {
-      border: 2px solid var(--tosca-neon);
-      box-shadow: 0 0 30px var(--tosca-neon), 0 0 50px var(--ferrari-red);
-    }
+  /* Inner glassy panel */
+  .container {
+    width: 100%;
+    padding: 35px;
+    background: var(--panel-glass);
+    backdrop-filter: blur(25px);
+    border-radius: 20px;
+    border-left: 5px solid var(--blood-red);
+    border-bottom: 12px solid var(--neon-purple);
+    position: relative; z-index: 1;
+    box-shadow: inset 0 0 30px var(--smoke-gray), 0 0 40px var(--glow-shadow);
+    transition: 0.3s;
+  }
 
-    #upInfo { width: 100%; margin: 25px 0; display: flex; justify-content: center; }
-    #upSpan {
-      display: flex; align-items: center; justify-content: center;
-      width: 100%; height: 70px;
-      background: rgba(0,0,0,0.8);
-      border: 2px solid var(--tosca-neon);
-      font-size: 30px;
-      color: var(--tosca-neon);
-      letter-spacing: 6px;
-      border-radius: 15px;
-      text-shadow: 0 0 15px var(--tosca-neon), 0 0 25px var(--cyber-yellow);
-      box-shadow: inset 0 0 20px var(--shadow-glow), 0 0 30px var(--shadow-glow);
-      user-select: none;
-      transition: 0.2s;
-    }
+  textarea {
+    width: 100%; height: 180px;
+    background: rgba(0,0,0,0.75);
+    border: 2px solid var(--blood-red);
+    color: #fff; padding: 18px;
+    font-family: 'Consolas', monospace;
+    font-size: 15px; border-radius: 15px;
+    resize: none; outline: none;
+    box-shadow: inset 0 0 15px rgba(255,255,255,0.05);
+    transition: 0.3s;
+  }
 
-    .konslet-text {
-      color: var(--success-green) !important;
-      text-shadow: 0 0 15px var(--success-green), 0 0 35px var(--success-green);
-      animation: blink-konslet 0.15s infinite alternate !important;
-    }
-    .up-flash-konslet {
-      border-color: var(--success-green) !important;
-      animation: blink-konslet 0.12s infinite alternate !important;
-    }
-    @keyframes blink-konslet {
-      0%, 100% { opacity: 1; filter: contrast(1.4); }
-      50% { opacity: 0.2; filter: contrast(0.7); }
-    }
+  textarea:focus {
+    border: 2px solid var(--neon-purple);
+    box-shadow: 0 0 35px var(--neon-purple), 0 0 55px var(--blood-red);
+  }
 
-    .btn-copy {
-      margin-top: 25px;
-      padding: 18px 70px;
-      background: linear-gradient(135deg, var(--ferrari-red), var(--tosca-neon));
-      color: #fff;
-      border: none;
-      font-size: 17px;
-      border-radius: 50px;
-      cursor: pointer;
-      outline: none;
-      transition: 0.3s ease;
-      box-shadow: 0 0 15px var(--ferrari-red), 0 0 25px var(--tosca-neon);
-    }
-    .btn-copy:hover {
-      transform: scale(1.1);
-      box-shadow: 0 0 25px var(--ferrari-red), 0 0 50px var(--tosca-neon);
-    }
-    .btn-copy:active { transform: scale(0.95); }
+  /* UP Box */
+  #upInfo { width: 100%; margin: 25px 0; display: flex; justify-content: center; }
+  #upSpan {
+    display: flex; align-items: center; justify-content: center;
+    width: 100%; height: 70px;
+    background: rgba(0,0,0,0.85);
+    border: 2px solid var(--neon-purple);
+    font-size: 30px; color: var(--neon-purple);
+    letter-spacing: 6px; border-radius: 15px;
+    text-shadow: 0 0 15px var(--neon-purple), 0 0 25px var(--gold);
+    box-shadow: inset 0 0 25px var(--glow-shadow), 0 0 35px var(--glow-shadow);
+    transition: 0.2s; user-select: none;
+  }
 
-    .table-responsive {
-      width: 100%;
-      margin-top: 25px;
-      max-height: 280px;
-      overflow-y: auto;
-      border-radius: 15px;
-      background: rgba(0,0,0,0.6);
-      box-shadow: inset 0 0 15px var(--shadow-glow);
-    }
-    table {
-      width: 100%;
-      border-collapse: collapse;
-    }
-    thead th {
-      background: rgba(0,0,0,0.9);
-      color: var(--cyber-yellow);
-      padding: 12px;
-      font-size: 12px;
-      border-bottom: 2px solid var(--tosca-neon);
-      position: sticky; top: 0;
-      text-shadow: 0 0 10px var(--cyber-yellow);
-    }
-    tbody td {
-      padding: 12px;
-      text-align: center;
-      color: var(--tosca-neon);
-      font-size: 14px;
-      border-bottom: 1px solid rgba(0,245,255,0.1);
-      transition: transform 0.2s, background 0.2s;
-    }
-    tbody tr:hover { background: rgba(0,245,255,0.15); transform: scale(1.02); }
+  /* Konslet big win effect */
+  .konslet-text {
+    color: var(--green-success) !important;
+    text-shadow: 0 0 15px var(--green-success), 0 0 35px var(--green-success);
+    animation: blink-konslet 0.15s infinite alternate !important;
+  }
+  .up-flash-konslet {
+    border-color: var(--green-success) !important;
+    animation: blink-konslet 0.12s infinite alternate !important;
+  }
+  @keyframes blink-konslet {
+    0%,100% { opacity:1; filter: contrast(1.4); }
+    50% { opacity:0.2; filter: contrast(0.7); }
+  }
 
-    @keyframes floatMove {
-      0%,100% { transform: translateY(0); }
-      50% { transform: translateY(-6px); }
-    }
-  </style>
+  /* Button copy */
+  .btn-copy {
+    margin-top: 25px;
+    padding: 18px 70px;
+    background: linear-gradient(135deg, var(--blood-red), var(--neon-purple));
+    color: #fff; border: none; font-size: 17px; border-radius: 50px;
+    cursor: pointer; outline: none;
+    box-shadow: 0 0 20px var(--blood-red), 0 0 40px var(--neon-purple);
+    transition: 0.3s ease;
+  }
+  .btn-copy:hover {
+    transform: scale(1.1);
+    box-shadow: 0 0 35px var(--blood-red), 0 0 60px var(--neon-purple);
+  }
+  .btn-copy:active { transform: scale(0.95); }
+
+  /* Table */
+  .table-responsive {
+    width: 100%; margin-top: 25px; max-height: 300px; overflow-y: auto;
+    border-radius: 15px; background: rgba(0,0,0,0.6);
+    box-shadow: inset 0 0 15px var(--glow-shadow);
+  }
+  table { width: 100%; border-collapse: collapse; }
+  thead th {
+    background: rgba(0,0,0,0.95); color: var(--gold);
+    padding: 12px; font-size: 12px; border-bottom: 2px solid var(--neon-purple);
+    text-shadow: 0 0 10px var(--gold); position: sticky; top: 0;
+  }
+  tbody td {
+    padding: 12px; text-align: center; font-size: 14px;
+    border-bottom: 1px solid rgba(255,215,0,0.15);
+    color: var(--neon-purple); transition: transform 0.2s, background 0.2s;
+  }
+  tbody tr:hover { background: rgba(255,0,0,0.15); transform: scale(1.02); }
+</style>
 </head>
 <body>
+
 <canvas id="vortexCanvas"></canvas>
+
 <div class="main-wrapper">
   <h1 class="moving-h1">SCATTER MAHJONG</h1>
   <div class="container-outer">
     <div class="container">
-      <textarea id="inputData" tabindex="1" placeholder="Tempel data di sini..."></textarea>
+      <textarea id="inputData" placeholder="Tempel data di sini..."></textarea>
       <div id="upInfo"><span id="upSpan">UP KEMENANGAN : -</span></div>
-      <div class="table-responsive" tabindex="0">
+      <div class="table-responsive">
         <table>
           <thead>
             <tr>
@@ -207,37 +189,37 @@
             </tr>
           </thead>
           <tbody id="tbodyBonus">
-            <tr><td colspan="7" style="color:#666; padding: 40px;">[ AWAITING_INPUT ]</td></tr>
+            <tr><td colspan="7" style="color:#666; padding:40px;">[ AWAITING_INPUT ]</td></tr>
           </tbody>
         </table>
       </div>
       <div style="text-align:center;">
-        <button class="btn-copy" id="btnCopy" tabindex="2" onclick="copyTableData()">SALIN DATA</button>
+        <button class="btn-copy" onclick="copyTableData()">SALIN DATA</button>
       </div>
     </div>
   </div>
 </div>
 
 <script>
-  // === Canvas Vortex ===
+  // === Canvas vortex particles ===
   const vCanvas = document.getElementById('vortexCanvas');
   const vCtx = vCanvas.getContext('2d');
-  let vParticles = [];
-  const colors = ['#ff2800','#00f5ff','#fcee0a'];
-  function resize(){ vCanvas.width=innerWidth; vCanvas.height=innerHeight; }
+  let vParticles=[];
+  const colors=['#ff1a1a','#9d00ff','#ffd700'];
+  function resize(){vCanvas.width=innerWidth;vCanvas.height=innerHeight;}
   window.addEventListener('resize', resize); resize();
   class Part{constructor(){this.reset()} reset(){this.x=vCanvas.width/2;this.y=vCanvas.height/2;this.oldX=this.x;this.oldY=this.y;this.size=Math.random()*2+1;this.angle=Math.random()*Math.PI*2;this.speed=Math.random()*0.3+0.1;this.color=colors[Math.floor(Math.random()*colors.length)];} update(){this.oldX=this.x;this.oldY=this.y;this.x+=Math.cos(this.angle)*this.speed;this.y+=Math.sin(this.angle)*this.speed;this.speed*=1.035;if(this.x<0||this.x>vCanvas.width||this.y<0||this.y>vCanvas.height)this.reset();} draw(){vCtx.strokeStyle=this.color;vCtx.lineWidth=this.size;vCtx.beginPath();vCtx.moveTo(this.oldX,this.oldY);vCtx.lineTo(this.x,this.y);vCtx.stroke();}}
   for(let i=0;i<120;i++) vParticles.push(new Part());
-  function animate(){vCtx.fillStyle='rgba(5,5,5,0.3)';vCtx.fillRect(0,0,vCanvas.width,vCanvas.height);vParticles.forEach(p=>{p.update();p.draw();});requestAnimationFrame(animate);}
+  function animate(){vCtx.fillStyle='rgba(12,10,10,0.3)';vCtx.fillRect(0,0,vCanvas.width,vCanvas.height);vParticles.forEach(p=>{p.update();p.draw();});requestAnimationFrame(animate);}
   animate();
 
-  // === JS Parsing dan Render Table ===
-  const ta = document.getElementById("inputData");
-  const upBox = document.getElementById("upSpan");
+  // === Parsing & Table logic ===
+  const ta=document.getElementById("inputData");
+  const upBox=document.getElementById("upSpan");
 
   ta.addEventListener("input",function(){
     const text=(this.value||"").trim();
-    if(!text){upBox.textContent="UP KEMENANGAN : -";upBox.classList.remove("up-flash-konslet");document.getElementById("tbodyBonus").innerHTML='<tr><td colspan="7" style="color:#666; padding: 40px;">[ AWAITING_INPUT ]</td></tr>';return;}
+    if(!text){upBox.textContent="UP KEMENANGAN : -";upBox.classList.remove("up-flash-konslet");document.getElementById("tbodyBonus").innerHTML='<tr><td colspan="7" style="color:#666; padding:40px;">[ AWAITING_INPUT ]</td></tr>';return;}
     const blocks=text.split(/\n\s*\n/);
     const rows=blocks.map(parseBlock).filter(Boolean);
     renderTable(rows);
@@ -249,7 +231,7 @@
     let ticketMatches=block.match(/\d{18,20}/g);
     if(ticketMatches){let freq={};ticketMatches.forEach(t=>freq[t]=(freq[t]||0)+1);data.ticket=Object.keys(freq).reduce((a,b)=>freq[a]>freq[b]?a:b);}
     lines.forEach((line,i)=>{
-      let clean=line.trim(); let l=clean.toLowerCase();
+      let clean=line.trim(), l=clean.toLowerCase();
       if(l.includes("mahjong")||l.includes("ways")||l.includes("wild bandito")||l.includes("lucky neko")||l.includes("pg soft")||l.includes("pragmatic")) data.permainan=clean;
       if(l.includes("credit")){let val=extractMoney(clean);if(val===0&&lines[i+1]) val=extractMoney(lines[i+1]);data.menang+=val;}
       if(l.includes("debit")){let val=extractMoney(clean);if(val===0&&lines[i+1]) val=extractMoney(lines[i+1]);data.taruhan=val;}
@@ -258,11 +240,9 @@
     if(data.permainan==="-"&&lines[0]) data.permainan=lines[0].trim();
     return (data.menang>0||data.userId!="-")?data:null;
   }
-
   function extractMoney(str){return parseInt(str.replace(/[.,]/g,"").replace(/[^\d]/g,""))||0;}
   function renderTable(rows){
-    const tbody=document.getElementById("tbodyBonus");
-    tbody.innerHTML="";
+    const tbody=document.getElementById("tbodyBonus"); tbody.innerHTML="";
     upBox.classList.remove("up-flash-konslet");
     rows.forEach(r=>{
       let up=r.taruhan>0?(r.menang/r.taruhan):0;
@@ -276,16 +256,14 @@
         <td ${flashClass}>-</td>
         <td ${flashClass}>${r.permainan}</td>
         <td style="font-size:11px;">${r.ticket}</td>
-        <td ${flashClass} style="color:#fff;">${r.menang.toLocaleString()}</td>
-        <td ${flashClass} style="color:var(--cyber-yellow);">${r.taruhan.toLocaleString()}</td>
+        <td ${flashClass} style="color:#fff;">${r.menang.toLocaleString('id-ID')}</td>
+        <td ${flashClass} style="color:var(--gold);">${r.taruhan.toLocaleString('id-ID')}</td>
       `;
       tbody.appendChild(tr);
     });
   }
-
   function copyTableData(){
-    const btn=document.getElementById("btnCopy");
-    let out="";
+    const btn=document.querySelector(".btn-copy"); let out="";
     document.querySelectorAll("#tbodyBonus tr").forEach(tr=>{
       let tds=tr.querySelectorAll("td");
       if(tds.length===7&&tds[0].innerText!=="[ AWAITING_INPUT ]") out+=Array.from(tds).map(td=>td.innerText).join("\t")+"\n";
