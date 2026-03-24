@@ -2,147 +2,155 @@
 <html lang="id">
 <head>
 <meta charset="UTF-8">
-<title>Scatter Mahjong - Dark Boss Edition</title>
-<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&display=swap" rel="stylesheet">
+<title>Scatter Mahjong - Retro Terminal</title>
+<link href="https://fonts.googleapis.com/css2?family=VT323&family=Press+Start+2P&family=Courier+Prime&display=swap" rel="stylesheet">
 <style>
-:root {
-  --bg-main: radial-gradient(circle at center, #050505, #1a1a1a 90%);
-  --red: #ff1c1c;
-  --orange: #ff7f11;
-  --metal: #777777;
-  --green: #39ff14;
-  --panel-bg: rgba(20,20,20,0.9);
-  --shadow-glow: rgba(255, 60, 0, 0.3);
-}
+  :root {
+    --bg: #000;
+    --fg: #fff;
+    --accent: #fff;
+    --glitch-red: #f00;
+    --glitch-blue: #0ff;
+  }
 
-* { box-sizing: border-box; font-family: 'Orbitron', monospace; font-weight: 600; }
-body, html {
-  margin:0; padding:0; width:100%; height:100%;
-  background: var(--bg-main);
-  display:flex; justify-content:center; align-items:center;
-  overflow:hidden;
-}
+  * { box-sizing: border-box; }
+  body, html {
+    margin: 0; padding: 0;
+    width: 100%; height: 100%;
+    background: var(--bg);
+    color: var(--fg);
+    font-family: 'VT323', monospace;
+    display: flex; justify-content: center; align-items: center;
+  }
 
-#vortexCanvas { position:fixed; inset:0; z-index:0; pointer-events:none; }
+  #vortexCanvas { position: fixed; inset: 0; z-index: 0; pointer-events: none; }
 
-.main-wrapper {
-  position:relative; z-index:10; width:95%; max-width:1200px; display:flex; flex-direction:column; align-items:center;
-}
+  .main-wrapper {
+    position: relative; z-index: 10;
+    width: 95%; max-width: 1000px;
+  }
 
-.moving-h1 {
-  color: var(--red);
-  font-size:3rem; letter-spacing:12px; text-transform:uppercase; margin-bottom:25px;
-  text-shadow: 0 0 10px var(--red),0 0 25px var(--orange),0 0 50px var(--metal);
-  animation: floatMove 3s ease-in-out infinite;
-}
+  /* Glitch Title */
+  .moving-h1 {
+    font-size: 3rem;
+    text-align: center;
+    letter-spacing: 5px;
+    color: var(--fg);
+    position: relative;
+    font-family: 'Press Start 2P', cursive;
+    animation: glitchText 2s infinite;
+  }
+  .moving-h1::before, .moving-h1::after {
+    content: 'SCATTER MAHJONG';
+    position: absolute;
+    left: 0; top: 0;
+    width: 100%;
+    overflow: hidden;
+  }
+  .moving-h1::before { left: 2px; text-shadow: -2px 0 var(--glitch-red); clip: rect(0,900px,30px,0); animation: glitchTop 2s infinite; }
+  .moving-h1::after { left: -2px; text-shadow: -2px 0 var(--glitch-blue); clip: rect(35px,900px,70px,0); animation: glitchBottom 2.5s infinite; }
 
-@keyframes floatMove {0%,100%{transform:translateY(0);}50%{transform:translateY(-6px);}}
+  @keyframes glitchText {
+    0%,100% { transform: none; }
+    20% { transform: skew(-1deg, -1deg); }
+    40% { transform: skew(1deg, 1deg); }
+    60% { transform: translate(-1px,-1px); }
+    80% { transform: translate(1px,1px); }
+  }
+  @keyframes glitchTop { 0%,100% { clip: rect(0,900px,30px,0); } 50% { clip: rect(10px,900px,40px,0); } }
+  @keyframes glitchBottom { 0%,100% { clip: rect(35px,900px,70px,0); } 50% { clip: rect(45px,900px,70px,0); } }
 
-.container-outer {
-  position: relative;
-  padding:5px;
-  border-radius:25px;
-  overflow:hidden;
-  width:100%;
-  background: linear-gradient(120deg, var(--red), var(--orange), var(--metal));
-  background-size:400% 400%;
-  animation: borderFlow 8s ease infinite;
-  box-shadow:0 0 25px var(--red),0 0 50px var(--orange);
-}
+  .container-outer {
+    margin-top: 20px;
+    border: 1px solid var(--fg);
+    padding: 5px;
+    border-radius: 5px;
+  }
 
-@keyframes borderFlow {
-  0%{background-position:0% 50%;}
-  50%{background-position:100% 50%;}
-  100%{background-position:0% 50%;}
-}
+  .container {
+    background: #111;
+    padding: 25px;
+    border-radius: 5px;
+    border: 1px solid var(--fg);
+  }
 
-.container {
-  width:100%;
-  padding:35px;
-  background: var(--panel-bg);
-  backdrop-filter: blur(25px);
-  border-radius:20px;
-  border-left:5px solid var(--red);
-  border-bottom:15px solid var(--orange);
-  box-shadow: inset 0 0 40px rgba(255,255,255,0.05), 0 0 50px var(--shadow-glow);
-  position: relative; z-index:1;
-  transition:0.3s;
-}
+  textarea {
+    width: 100%;
+    height: 150px;
+    background: #000;
+    border: 1px solid var(--fg);
+    color: var(--fg);
+    padding: 10px;
+    font-family: 'Courier Prime', monospace;
+    font-size: 14px;
+    resize: none;
+    outline: none;
+  }
+  textarea:focus { border-color: var(--accent); }
 
-textarea {
-  width:100%; height:180px; padding:18px; font-family:'Consolas', monospace;
-  font-size:15px; border-radius:15px; resize:none; outline:none;
-  border:2px solid var(--red); background: rgba(0,0,0,0.75); color:#fff;
-  box-shadow: inset 0 0 15px rgba(255,60,0,0.1);
-  transition:0.3s;
-}
-textarea:focus {
-  border:2px solid var(--orange);
-  box-shadow:0 0 30px var(--orange),0 0 50px var(--red);
-}
+  #upInfo { width: 100%; margin: 15px 0; text-align: center; }
+  #upSpan {
+    display: inline-block;
+    padding: 10px 15px;
+    border: 1px solid var(--fg);
+    font-family: 'VT323', monospace;
+    font-size: 18px;
+    letter-spacing: 2px;
+    color: var(--fg);
+  }
 
-#upInfo { width:100%; margin:25px 0; display:flex; justify-content:center; }
-#upSpan {
-  width:100%; height:70px; border-radius:15px;
-  display:flex; align-items:center; justify-content:center;
-  font-size:30px; color: var(--orange); background: rgba(0,0,0,0.8);
-  border:2px solid var(--orange);
-  text-shadow:0 0 15px var(--orange),0 0 25px var(--red);
-  box-shadow: inset 0 0 20px var(--shadow-glow),0 0 30px var(--shadow-glow);
-  user-select:none; transition:0.2s;
-}
-.konslet-text {
-  color: var(--green) !important;
-  text-shadow: 0 0 15px var(--green), 0 0 35px var(--green);
-  animation: blink-konslet 0.15s infinite alternate !important;
-}
-.up-flash-konslet {
-  border-color: var(--green) !important;
-  animation: blink-konslet 0.12s infinite alternate !important;
-}
-@keyframes blink-konslet {0%,100%{opacity:1;filter:contrast(1.4);}50%{opacity:0.2;filter:contrast(0.7);}}
+  .konslet-text { color: var(--accent); }
 
-.btn-copy {
-  margin-top:25px; padding:18px 70px; font-size:17px;
-  background: linear-gradient(135deg, var(--red), var(--orange));
-  color:#fff; border:none; border-radius:50px; cursor:pointer;
-  outline:none; transition:0.3s ease; box-shadow:0 0 15px var(--red),0 0 25px var(--orange);
-}
-.btn-copy:hover {
-  transform:scale(1.1);
-  box-shadow:0 0 25px var(--red),0 0 50px var(--orange);
-}
-.btn-copy:active {transform:scale(0.95);}
+  /* Copy Button Glitch */
+  .btn-copy {
+    margin-top: 15px;
+    padding: 10px 50px;
+    font-family: 'Press Start 2P', cursive;
+    font-size: 14px;
+    background: #000;
+    color: var(--fg);
+    border: 1px solid var(--fg);
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+  }
+  .btn-copy::before, .btn-copy::after {
+    content: 'SALIN DATA';
+    position: absolute; left: 0; top: 0;
+    width: 100%; height: 100%;
+  }
+  .btn-copy::before { left: 1px; text-shadow: -1px 0 var(--glitch-red); clip: rect(0,200px,20px,0); animation: glitchBtnTop 2s infinite; }
+  .btn-copy::after { left: -1px; text-shadow: -1px 0 var(--glitch-blue); clip: rect(5px,200px,40px,0); animation: glitchBtnBottom 2.5s infinite; }
 
-.table-responsive {
-  width:100%; margin-top:25px; max-height:280px; overflow-y:auto;
-  border-radius:15px; background:rgba(0,0,0,0.6);
-  box-shadow: inset 0 0 15px var(--shadow-glow);
-}
-table { width:100%; border-collapse:collapse; }
-thead th {
-  background: rgba(0,0,0,0.9); color: var(--orange); padding:12px;
-  font-size:12px; border-bottom:2px solid var(--red);
-  position: sticky; top:0; text-shadow:0 0 10px var(--orange);
-}
-tbody td {
-  padding:12px; text-align:center; color: var(--red); font-size:14px;
-  border-bottom:1px solid rgba(255,60,0,0.1); transition: transform 0.2s, background 0.2s;
-}
-tbody tr:hover { background: rgba(255,60,0,0.15); transform: scale(1.02); }
+  @keyframes glitchBtnTop { 0%,100% { clip: rect(0,200px,20px,0); } 50% { clip: rect(10px,200px,25px,0); } }
+  @keyframes glitchBtnBottom { 0%,100% { clip: rect(5px,200px,40px,0); } 50% { clip: rect(15px,200px,40px,0); } }
 
+  .table-responsive {
+    width: 100%;
+    margin-top: 15px;
+    max-height: 220px;
+    overflow-y: auto;
+    border: 1px solid var(--fg);
+  }
+  table { width: 100%; border-collapse: collapse; }
+  thead th { text-align: center; font-size: 12px; padding: 5px; border-bottom: 1px solid var(--fg); }
+  tbody td { text-align: center; font-size: 12px; padding: 5px; border-bottom: 1px solid #222; }
+  tbody tr:hover { background: #222; }
+
+  canvas { position: fixed; inset:0; z-index:0; pointer-events:none; }
 </style>
 </head>
 <body>
 
 <canvas id="vortexCanvas"></canvas>
+
 <div class="main-wrapper">
   <h1 class="moving-h1">SCATTER MAHJONG</h1>
   <div class="container-outer">
     <div class="container">
-      <textarea id="inputData" placeholder="Tempel data di sini..." tabindex="1"></textarea>
+      <textarea id="inputData" placeholder="Tempel data di sini..."></textarea>
       <div id="upInfo"><span id="upSpan">UP KEMENANGAN : -</span></div>
-      <div class="table-responsive" tabindex="0">
+      <div class="table-responsive">
         <table>
           <thead>
             <tr>
@@ -150,37 +158,28 @@ tbody tr:hover { background: rgba(255,60,0,0.15); transform: scale(1.02); }
             </tr>
           </thead>
           <tbody id="tbodyBonus">
-            <tr><td colspan="7" style="color:#666; padding: 40px;">[ AWAITING_INPUT ]</td></tr>
+            <tr><td colspan="7">[ AWAITING_INPUT ]</td></tr>
           </tbody>
         </table>
       </div>
       <div style="text-align:center;">
-        <button class="btn-copy" id="btnCopy" tabindex="2" onclick="copyTableData()">SALIN DATA</button>
+        <button class="btn-copy" onclick="copyTableData()">SALIN DATA</button>
       </div>
     </div>
   </div>
 </div>
 
 <script>
-const vCanvas = document.getElementById('vortexCanvas');
-const vCtx = vCanvas.getContext('2d');
-let vParticles=[];
-const colors=['#ff1c1c','#ff7f11','#777777'];
-function resize(){vCanvas.width=innerWidth; vCanvas.height=innerHeight;}
-window.addEventListener('resize',resize); resize();
-class Part{constructor(){this.reset()} reset(){this.x=vCanvas.width/2;this.y=vCanvas.height/2;this.oldX=this.x;this.oldY=this.y;this.size=Math.random()*2+1;this.angle=Math.random()*Math.PI*2;this.speed=Math.random()*0.3+0.1;this.color=colors[Math.floor(Math.random()*colors.length)];} update(){this.oldX=this.x;this.oldY=this.y;this.x+=Math.cos(this.angle)*this.speed;this.y+=Math.sin(this.angle)*this.speed; this.speed*=1.035;if(this.x<0||this.x>vCanvas.width||this.y<0||this.y>vCanvas.height)this.reset();} draw(){vCtx.strokeStyle=this.color;vCtx.lineWidth=this.size;vCtx.beginPath();vCtx.moveTo(this.oldX,this.oldY);vCtx.lineTo(this.x,this.y);vCtx.stroke();}}
-for(let i=0;i<120;i++)vParticles.push(new Part());
-function animate(){vCtx.fillStyle='rgba(5,5,5,0.3)';vCtx.fillRect(0,0,vCanvas.width,vCanvas.height);vParticles.forEach(p=>{p.update();p.draw();});requestAnimationFrame(animate);}
-animate();
-
-const ta=document.getElementById("inputData");
-const upBox=document.getElementById("upSpan");
-
-function formatRibuan(num){return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g,",");}
+const ta = document.getElementById("inputData");
+const upBox = document.getElementById("upSpan");
 
 ta.addEventListener("input",function(){
   const text=(this.value||"").trim();
-  if(!text){upBox.textContent="UP KEMENANGAN : -"; upBox.classList.remove("up-flash-konslet"); document.getElementById("tbodyBonus").innerHTML='<tr><td colspan="7" style="color:#666; padding: 40px;">[ AWAITING_INPUT ]</td></tr>'; return;}
+  if(!text){
+    upBox.textContent="UP KEMENANGAN : -";
+    document.getElementById("tbodyBonus").innerHTML='<tr><td colspan="7">[ AWAITING_INPUT ]</td></tr>';
+    return;
+  }
   const blocks=text.split(/\n\s*\n/);
   const rows=blocks.map(parseBlock).filter(Boolean);
   renderTable(rows);
@@ -190,10 +189,10 @@ function parseBlock(block){
   let lines=block.split('\n');
   let data={userId:"-",permainan:"-",ticket:"-",menang:0,taruhan:0};
   let ticketMatches=block.match(/\d{18,20}/g);
-  if(ticketMatches){let freq={}; ticketMatches.forEach(t=>freq[t]=(freq[t]||0)+1); data.ticket=Object.keys(freq).reduce((a,b)=>freq[a]>freq[b]?a:b);}
+  if(ticketMatches){let freq={};ticketMatches.forEach(t=>freq[t]=(freq[t]||0)+1);data.ticket=Object.keys(freq).reduce((a,b)=>freq[a]>freq[b]?a:b);}
   lines.forEach((line,i)=>{
     let clean=line.trim(); let l=clean.toLowerCase();
-    if(l.includes("mahjong")||l.includes("ways")||l.includes("wild bandito")||l.includes("lucky neko")||l.includes("pg soft")||l.includes("pragmatic")) data.permainan=clean;
+    if(l.includes("mahjong")||l.includes("ways")||l.includes("wild")||l.includes("lucky")||l.includes("pg soft")||l.includes("pragmatic")) data.permainan=clean;
     if(l.includes("credit")){let val=extractMoney(clean); if(val===0&&lines[i+1]) val=extractMoney(lines[i+1]); data.menang+=val;}
     if(l.includes("debit")){let val=extractMoney(clean); if(val===0&&lines[i+1]) val=extractMoney(lines[i+1]); data.taruhan=val;}
     if(clean.length>=3&&clean.length<=15&&/^[a-zA-Z0-9_]+$/.test(clean)&&!/(idr|credit|debit|ext|pg|balance|mahjong|ways|wild|neko)/i.test(l)) data.userId=clean;
@@ -202,34 +201,49 @@ function parseBlock(block){
   return (data.menang>0||data.userId!="-")?data:null;
 }
 function extractMoney(str){return parseInt(str.replace(/[.,]/g,"").replace(/[^\d]/g,""))||0;}
+
 function renderTable(rows){
-  const tbody=document.getElementById("tbodyBonus"); tbody.innerHTML=""; upBox.classList.remove("up-flash-konslet");
+  const tbody=document.getElementById("tbodyBonus");
+  tbody.innerHTML="";
   rows.forEach(r=>{
     let up=r.taruhan>0?(r.menang/r.taruhan):0;
     upBox.textContent=`UP KEMENANGAN : ${Math.round(up)} x`;
     let tr=document.createElement("tr");
-    let isBigWin=up>=300; if(isBigWin) upBox.classList.add("up-flash-konslet");
-    const flashClass=isBigWin?'class="konslet-text"':'';
     tr.innerHTML=`
-      <td ${flashClass}>${r.userId}</td>
-      <td ${flashClass}>-</td>
-      <td ${flashClass}>-</td>
-      <td ${flashClass}>${r.permainan}</td>
-      <td style="font-size:11px;">${r.ticket}</td>
-      <td ${flashClass} style="color:#fff;">${formatRibuan(r.menang)}</td>
-      <td ${flashClass} style="color:var(--orange);">${formatRibuan(r.taruhan)}</td>
+      <td>${r.userId}</td>
+      <td>-</td>
+      <td>-</td>
+      <td>${r.permainan}</td>
+      <td>${r.ticket}</td>
+      <td>${r.menang.toLocaleString('en-US')}</td>
+      <td>${r.taruhan.toLocaleString('en-US')}</td>
     `;
     tbody.appendChild(tr);
   });
 }
+
 function copyTableData(){
-  const btn=document.getElementById("btnCopy"); let out="";
+  let out="";
   document.querySelectorAll("#tbodyBonus tr").forEach(tr=>{
     let tds=tr.querySelectorAll("td");
-    if(tds.length===7 && tds[0].innerText!=="[ AWAITING_INPUT ]") out+=Array.from(tds).map(td=>td.innerText).join("\t")+"\n";
+    if(tds.length===7&&tds[0].innerText!=="[ AWAITING_INPUT ]")
+      out+=Array.from(tds).map(td=>td.innerText).join("\t")+"\n";
   });
-  if(out){navigator.clipboard.writeText(out).then(()=>{btn.innerText="BERHASIL DISALIN!"; setTimeout(()=>{btn.innerText="SALIN DATA";},1200);});}
+  if(out) navigator.clipboard.writeText(out).then(()=>{ alert("Data berhasil disalin!"); });
 }
+
+// === Canvas Vortex ===
+const vCanvas = document.getElementById('vortexCanvas');
+const vCtx = vCanvas.getContext('2d');
+let vParticles = [];
+const colors = ['#fff'];
+function resize(){ vCanvas.width=innerWidth; vCanvas.height=innerHeight; }
+window.addEventListener('resize', resize); resize();
+class Part{constructor(){this.reset()} reset(){this.x=vCanvas.width/2;this.y=vCanvas.height/2;this.oldX=this.x;this.oldY=this.y;this.size=Math.random()*2+1;this.angle=Math.random()*Math.PI*2;this.speed=Math.random()*0.5+0.2;this.color=colors[0];} update(){this.oldX=this.x;this.oldY=this.y;this.x+=Math.cos(this.angle)*this.speed;this.y+=Math.sin(this.angle)*this.speed;this.speed*=1.02;if(this.x<0||this.x>vCanvas.width||this.y<0||this.y>vCanvas.height)this.reset();} draw(){vCtx.strokeStyle=this.color;vCtx.lineWidth=this.size;vCtx.beginPath();vCtx.moveTo(this.oldX,this.oldY);vCtx.lineTo(this.x,this.y);vCtx.stroke();}}
+for(let i=0;i<120;i++) vParticles.push(new Part());
+function animate(){vCtx.fillStyle='rgba(0,0,0,0.2)';vCtx.fillRect(0,0,vCanvas.width,vCanvas.height);vParticles.forEach(p=>{p.update();p.draw();});requestAnimationFrame(animate);}
+animate();
+
 </script>
 </body>
 </html>
